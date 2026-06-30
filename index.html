@@ -764,7 +764,7 @@
 
         // TEXTO LARGO Y CUENTA REGRESIVA DE 5 SEGUNDOS
         function triggerStoryText() {
-            const story = "Esta es la historia de un amor verdadero, amor que es cada día más grande y se expande sin fin cierto, así como el universo en el que habitamos, universo que formamos tú y yo, eres mi princesa, la niña de mis ojos, mi razón de ser, eres mi universo 😊❤️... Y juntos formamos algo maravilloso como lo que vas a presenciar a continuación mi vida hermosa bella preciosa 💐...";
+            const story = "Esta es la historia de un amor verdadero, amor que es cada día más grande y se expande como el universo, el que formamos tú y yo, eres mi princesa, la niña de mis ojos, mi razón de ser, eres mi universo 😊❤️... Y juntos formamos algo maravilloso como lo que vas a presenciar a continuación mi vida hermosa 💐...";
             
             // Mueve el canvas hacia arriba suavemente
             canvas.style.transition = "transform 2s ease";
@@ -867,19 +867,28 @@
             updateSpacePosition();
         }
 
+        // CONTROLADORES DE EVENTOS (MOUSE Y TOUCH CELULAR CORREGIDO)
+        
+        // Para Computadora (Mouse)
         spaceContainer.addEventListener('mousedown', startDrag);
-        spaceContainer.addEventListener('touchstart', (e) => startDrag(e.touches));
         window.addEventListener('mousemove', dragMove);
-        window.addEventListener('touchmove', (e) => dragMove(e.touches));
         window.addEventListener('mouseup', endDrag);
+
+        // Para Celulares (Touch)
+        spaceContainer.addEventListener('touchstart', (e) => startDrag(e.touches[0]), { passive: false });
+        window.addEventListener('touchmove', (e) => {
+            // Esto evita que el celular mueva el navegador o intente recargar al deslizar el dedo
+            e.preventDefault(); 
+            dragMove(e.touches[0]);
+        }, { passive: false });
         window.addEventListener('touchend', endDrag);
 
+        // FUNCIÓN INICIO DE ARRASTRE
         function startDrag(e) {
             isDragging = true;
             startX = e.clientX - currentX;
             startY = e.clientY - currentY;
         }
-
         // CONTROL DE MOVIMIENTO CORREGIDO CON LÍMITES ESTRICTOS
         function dragMove(e) {
             if (!isDragging) return;
